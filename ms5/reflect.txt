@@ -1,0 +1,149 @@
+/* ------------------------------------------------------
+Final project Milestone 5 reflection
+Filename: reflect.txt
+Name : Harsh Vishnu Limbachiya
+Email id: Hvlimbachiya@myseneca.ca
+Date: 2022-04-15
+-----------------------------------------------------------*/
+
+Reflection for Milestone and Course
+
+In this milestone all the topics that were covered in our sylabus were implemented and also gave a idea of how we can create a interactive interface to extract data from file and to add, update and do other implementation on our file data based on the users need.
+For Eg.
+	1) Utils class 
+	In the Utils we  use basic function to get a validated number in the based on type need.also we make function name 	   	allocopy which we use to copy the string dynamically from other string.
+	
+		 void alloCopy(char* des, const char* src);
+        	 int getInt(const char* prompt = nullptr);
+        	 double getdouble(const char* prompt = nullptr);
+
+	2)Date class
+	 In the Date function we build a date class and this class helps us in getting date in int form and convert it to 		valid date.
+
+	3)Status class
+	 In the Status file we use this class to check if our item is in bad state or good state by implementing different 		function,class constructor and helper fuction.	 
+	class Status
+	{
+		char* m_description{};
+		int m_code;
+		void safeEmpty();
+	public:
+		//constructor 
+		Status(char* desc = nullptr, int code = 0);
+		//type conversion 
+		operator int() const;
+		operator char* () const;
+		operator bool() const;
+		//Assignment operator
+		Status& operator=(int code);
+		Status& operator=(const char*);
+		//Rule of three
+		Status(const Status& state);
+		Status& operator=(const Status& status);
+		//clear method
+		Status& clear();
+		~Status();
+		std::ostream& print(std::ostream& ostr)const;
+		friend std::ostream& operator<<(std::ostream& ostr, const Status&);
+	};
+	
+	In this class we have a member "description" to describe the error and "code" that represents the error code.
+	
+	4)Menu and AidMan class
+	Menu and AidMan are both together used to create the user interface of system. the Aidman class has different 			methods like add, search, remove, update, and list that can change the data in the file and list and display them as 		per the users needs on the screen.
+	for eg.
+		1)void AidMan::addItem()
+	{
+		if (m_ProdNumber > sdds_max_num_items)
+		{
+			cout << "Database full!" << endl;
+		}
+		else
+		{
+			iProduct* prod{};
+			Menu type("1- Perishable\n2- Non-Perishable\n-----------------\n", 2);
+			int userEntry = type.run();
+			if (userEntry == 1)
+			{
+				prod = new Perishable;
+			}
+			else if (userEntry == 2)
+			{
+				prod = new Item;
+			}
+			else
+			{
+				cout << "Aborted\n";
+			}
+
+			int val = prod->readSku(cin);
+			if (search(val) == -1)
+			{
+				prod->read(cin);
+				if (*prod)
+				{
+					m_product[m_ProdNumber] = prod;
+					m_ProdNumber++;
+				}
+				else
+				{
+					cout << *prod;
+					delete prod;
+				}
+			}
+			else
+			{
+				cout << "Sku: " << val << " is already in the system, try updating quantity instead.\n";
+				delete prod;
+			}
+		}
+	}
+
+5). Perishable and Item Class
+	Perishable and Item class contains details of the Item also if the Item is Perishable or not. The data from the file 		is read and seperated and send to a specific class like Persihable and Item.
+	
+6).iProducts 
+	iProducts class is an interface for the item in the application that is virtual function.
+	It contains of pure functions in this class, and to keep track of the Item and Perishable item with the expiry date.
+	For eg.
+	
+	class iProduct
+	{
+	public:
+		virtual int readSku(std::istream& istr);
+		// to reduce the quantity on hand
+		virtual int operator-=(int qty);
+		// to increase the quantity on hand
+		virtual int operator+=(int qty);
+		// returns the price of the produce
+		virtual operator double()const;
+		// returns if the iProduct is in a good state
+		virtual operator bool()const;
+		// returns the number of products needed
+		virtual int qtyNeeded()const;
+		// retuns the quantity on hand
+		virtual int qty()const;
+		// determines if the iProduct is displayed in a linear format or 
+		// descriptive format
+		virtual void linear(bool isLinear) = 0;
+		// saves the iProduct into a file
+		virtual std::ofstream& save(std::ofstream& ofstr)const = 0;
+		// loads an iProduct from a file
+		virtual std::ifstream& load(std::ifstream& ifstr) = 0;
+		// displays the iProduct on the screen
+		virtual std::ostream& display(std::ostream& ostr)const = 0;
+		// reads the iProduct from the console
+		virtual std::istream& read(std::istream& istr) = 0;
+		// return true if the sku is a match to the iProduct's sku
+		virtual bool operator==(int sku)const = 0;
+		// rtrns true if the description is found in the iPorduct's description
+		virtual bool operator==(const char* description)const = 0;
+		virtual ~iProduct();
+	};
+	
+
+Reflection Learning :
+	This project was built using all the topics of C++ and gave me a very good example how we can simply create a 	application that can help the user to make changes with very different ways to get the correct information that
+	that he wants from the file with the help of sorting and listing function that we use in the application.It was very 		informative and covered different topics like constructors, copy constructor, assignment operator, dellocator, helper 	functions, etc.  
+	There were some issues and I changed them as I was completing different parts of the milestone for eg changing the 	function from utils that take an valid integer from the input, also the status file was not done properly by me and 
+	I changed the menu options to dynamic later in the project. 
